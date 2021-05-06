@@ -9,8 +9,8 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-# Created by https://www.toptal.com/developers/gitignore/api/windows,linux,visualstudio,phpstorm+all,symfony
-# Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,visualstudio,phpstorm+all,symfony
+# Created by https://www.toptal.com/developers/gitignore/api/windows,linux,visualstudio,visualstudiocode,phpstorm+all,symfony
+# Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,visualstudio,visualstudiocode,phpstorm+all,symfony
 
 ### Linux ###
 *~
@@ -173,6 +173,19 @@ modules.xml
 ### Symfony Patch ###
 /web/css/
 /web/js/
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -345,7 +358,8 @@ _TeamCity*
 !.axoCover/settings.json
 
 # Coverlet is a free, cross platform Code Coverage Tool
-coverage*[.json, .xml, .info]
+coverage*.[ji][sn][of][no]
+coverage*.xml
 
 # Visual Studio code coverage results
 *.coverage
@@ -565,4 +579,4 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 *.tlog
 
-# End of https://www.toptal.com/developers/gitignore/api/windows,linux,visualstudio,phpstorm+all,symfony
+# End of https://www.toptal.com/developers/gitignore/api/windows,linux,visualstudio,visualstudiocode,phpstorm+all,symfony
