@@ -28,7 +28,7 @@ final class Version20210507215830 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE meal_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE stats_bio_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE users_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE activity_log (id INT NOT NULL, users_id_users_id INT NOT NULL, activity_type_id_activity_type_id INT NOT NULL, steps INT NOT NULL, length TIME(0) WITHOUT TIME ZONE NOT NULL, distance DOUBLE PRECISION NOT NULL, has_distance BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE activity_log (id INT NOT NULL, users_id_users_id INT NOT NULL, activity_type_id_activity_type_id INT NOT NULL, steps INT NOT NULL, length TIME(0) WITHOUT TIME ZONE NOT NULL, distance DOUBLE PRECISION NULL, has_distance BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_FD06F647C0DD645A ON activity_log (users_id_users_id)');
         $this->addSql('CREATE INDEX IDX_FD06F647C3A10FB5 ON activity_log (activity_type_id_activity_type_id)');
         $this->addSql('CREATE TABLE activity_type (id INT NOT NULL, name VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
