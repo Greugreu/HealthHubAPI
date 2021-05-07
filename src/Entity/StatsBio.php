@@ -35,7 +35,7 @@ class StatsBio
     /**
      * @ORM\OneToOne(targetEntity=Users::class, mappedBy="statsBio_idStatsBio", cascade={"persist", "remove"})
      */
-    private $activityLog_idActivityLog;
+    private $users_idUsers;
 
     public function getId(): ?int
     {
@@ -78,19 +78,19 @@ class StatsBio
         return $this;
     }
 
-    public function getActivityLogIdActivityLog(): ?Users
+    public function getUsersIdUsers(): ?Users
     {
-        return $this->activityLog_idActivityLog;
+        return $this->users_idUsers;
     }
 
-    public function setActivityLogIdActivityLog(Users $activityLog_idActivityLog): self
+    public function setUsersIdUsers(Users $users_idUsers): self
     {
         // set the owning side of the relation if necessary
-        if ($activityLog_idActivityLog->getStatsBioIdStatsBio() !== $this) {
-            $activityLog_idActivityLog->setStatsBioIdStatsBio($this);
+        if ($users_idUsers->getStatsBioIdStatsBio() !== $this) {
+            $users_idUsers->setStatsBioIdStatsBio($this);
         }
 
-        $this->activityLog_idActivityLog = $activityLog_idActivityLog;
+        $this->users_idUsers = $users_idUsers;
 
         return $this;
     }
