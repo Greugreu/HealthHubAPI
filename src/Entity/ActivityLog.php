@@ -49,7 +49,7 @@ class ActivityLog
     private $users_idUsers;
 
     /**
-     * @ORM\ManyToOne(targetEntity=activityType::class, inversedBy="activityLog_idActivityLog")
+     * @ORM\ManyToOne(targetEntity=ActivityType::class, inversedBy="activityLog_idActivityLog")
      * @ORM\JoinColumn(nullable=false)
      */
     private $activityType_idActivityType;
