@@ -13,7 +13,7 @@ class AdressFixtures extends Fixture
 
         for ($i = 0; $i < 4; $i++){
             $address = new AdressBook();
-            $address->setStreetNum("street num$i");
+            $address->setStreetNum($i);
             $address->setStreet("street$i");
             $address->setRegion("region$i");
             $address->setCity("city$i");
