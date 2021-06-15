@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\StatsBio;
 use App\Entity\Users;
+use App\service\UsersService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,41 +18,25 @@ class UsersController extends AbstractController
 {
 
     private EntityManagerInterface $manager;
+    private UsersService $userService;
 
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(EntityManagerInterface $manager, UsersService $usersService)
     {
         $this->manager = $manager;
+        $this->userService = $usersService;
     }
 
     /**
      * @Route("/users/new", name="createUser", methods={"POST"})
      * @param Request $request
      * @return Response
+     * @throws Exception
      */
     public function createUser(Request $request): Response
     {
-        $data = json_decode($request->getContent(), true);
-        print_r($data);
-            $firstname = $data['username'];
-            $lastName = $data['lastname'];
-            $email = $data['email'];
-            $password = $data['password'];
-            $gender = $data['gender'];
-
         try {
-            if (!empty($firstname) && !empty($lastName) && !empty($email) && !empty($password) && !empty($gender)) {
-                $user = new Users();
-                $stats = new StatsBio();
-                $user->setFirstname($firstname)
-                    ->setLastname($lastName)
-                    ->setMail($email)
-                    ->setPassword($password)
-                    ->setGender($gender);
-                $user->setStatsBioIdStatsBio($stats);
-                $this->manager->persist($user);
-                $this->manager->flush();
-            }
-        } catch (NotFoundHttpException $e){
+            $this->userService->createUser($request, $this->manager);
+        } catch (Exception $e) {
             throw $e;
         }
 
