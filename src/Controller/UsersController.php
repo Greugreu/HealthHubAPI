@@ -6,6 +6,7 @@ use App\Entity\StatsBio;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -22,20 +23,19 @@ class UsersController extends AbstractController
     }
 
     /**
-     * @Route("create/user", name="createUser", methods={"POST"})
+     * @Route("/users/new", name="createUser", methods={"POST"})
      * @param Request $request
      * @return Response
      */
     public function createUser(Request $request): Response
     {
-        $firstname = $request->request->get('firstname');
-        $lastName = $request->request->get('lastname');
-        $email = $request->request->get('mail');
-        $password = $request->request->get('password');
-        $gender = $request->request->get('gender');
-
-
-        $response = new Response();
+        $data = json_decode($request->getContent(), true);
+        print_r($data);
+            $firstname = $data['username'];
+            $lastName = $data['lastname'];
+            $email = $data['email'];
+            $password = $data['password'];
+            $gender = $data['gender'];
 
         try {
             if (!empty($firstname) && !empty($lastName) && !empty($email) && !empty($password) && !empty($gender)) {
@@ -49,21 +49,12 @@ class UsersController extends AbstractController
                 $user->setStatsBioIdStatsBio($stats);
                 $this->manager->persist($user);
                 $this->manager->flush();
-
-                $response->setStatusCode(201);
-            } else {
-                $response->setStatusCode(400);
-
-
             }
-        }
-        catch (NotFoundHttpException $e){
+        } catch (NotFoundHttpException $e){
             throw $e;
         }
 
-        return $response;
-
-
+        return new JsonResponse(['status' => 'User Created'], Response::HTTP_CREATED);
     }
 
     /**
