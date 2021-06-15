@@ -1,10 +1,11 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    password_hashers:
+    encoders:
         # use your user class name here
         App\Entity\Users:
-            # Use native password hasher, which auto-selects the best
-            # possible hashing algorithm (starting from Symfony 5.3 this is "bcrypt")
+            # Use native password encoder
+            # This value auto-selects the best possible hashing algorithm
+            # (i.e. Sodium when available).
             algorithm: auto
     providers:
         users_in_memory: { memory: null }

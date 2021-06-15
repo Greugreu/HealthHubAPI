@@ -4,19 +4,19 @@ namespace App\DataFixtures;
 
 use App\Entity\Users;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\Persistence\ObjectManager;
 
 
 
 class UsersFixture extends Fixture
 {
+    private UserPasswordEncoderInterface $passwordEncoder;
 
-//    private $encoder;
-//
-//    public function __construct(UserPasswordEncoderInterface $encoder)
-//    {
-//        $this->encoder = $encoder;
-//    }
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
 
     public function load(ObjectManager $manager)
     {
@@ -26,7 +26,7 @@ class UsersFixture extends Fixture
         $user->setMail("jeanmiche@gmail.com");
 
 
-        $user->setPassword(password_hash('putain', PASSWORD_BCRYPT ));
+        $user->setPassword($this->passwordEncoder->encodePassword($user, 'LePasswordPutain'));
 
         $manager->persist($user);
         $manager->flush();

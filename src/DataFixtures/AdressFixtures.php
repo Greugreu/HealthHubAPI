@@ -21,7 +21,6 @@ class AdressFixtures extends Fixture
             $manager->persist($address);
         }
 
-
         $manager->flush();
     }
 }
