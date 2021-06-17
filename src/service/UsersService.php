@@ -80,7 +80,7 @@ class UsersService
             return $e;
         } else {
             $manager->flush();
-            return new JsonResponse(['status' => 'User Created'], Response::HTTP_CREATED);
+            return new JsonResponse(['status' => 'User Updated'], Response::HTTP_CREATED);
         }
 
     }
