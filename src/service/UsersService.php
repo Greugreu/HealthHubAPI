@@ -14,28 +14,31 @@ use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UsersService
 {
+    private $passwordHasher;
+    public function __construct(UserPasswordEncoderInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
     public function createUser(Request $request, EntityManagerInterface $manager)
     {
+
         $data = json_decode($request->getContent(), true);
-        $firstname = $data['username'];
-        $lastName = $data['lastname'];
         $email = $data['email'];
         $password = $data['password'];
-        $gender = $data['gender'];
 
         try {
-            if (!empty($firstname) && !empty($lastName) && !empty($email) && !empty($password) && !empty($gender)) {
+            if (!empty($email) && !empty($password)) {
                 $user = new Users();
                 $stats = new StatsBio();
-                $user->setFirstname($firstname)
-                    ->setLastname($lastName)
+                $user
                     ->setMail($email)
-                    ->setPassword($password)
-                    ->setGender($gender);
+                    ->setPassword($this->passwordHasher->encodePassword($user, $password));
                 $user->setStatsBioIdStatsBio($stats);
+                $stats->setCreatedAt(new \DateTime('now'));
                 $manager->persist($user);
                 $manager->flush();
             }
