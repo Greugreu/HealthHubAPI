@@ -46,28 +46,28 @@ class Users implements UserInterface
     private $gender;
 
     /**
-     * @ORM\OneToMany(targetEntity=meal::class, mappedBy="users_idUsers")
+     * @ORM\OneToMany(targetEntity=Meal::class, mappedBy="users_idUsers")
      */
     private $meal_idMeal;
 
     /**
-     * @ORM\OneToOne(targetEntity=consume::class, inversedBy="users", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Consume::class, inversedBy="users", cascade={"persist", "remove"})
      */
     private $consume_idConsume;
 
     /**
-     * @ORM\OneToOne(targetEntity=adressBook::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=AdressBook::class, cascade={"persist", "remove"})
      */
     private $adressBook_idAdressBook;
 
     /**
-     * @ORM\OneToOne(targetEntity=statsBio::class, inversedBy="activityLog_idActivityLog", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=StatsBio::class, inversedBy="activityLog_idActivityLog", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $statsBio_idStatsBio;
 
     /**
-     * @ORM\OneToMany(targetEntity=activityLog::class, mappedBy="users_idUsers")
+     * @ORM\OneToMany(targetEntity=ActivityLog::class, mappedBy="users_idUsers")
      */
     private $activityLog_idActivityLog;
 

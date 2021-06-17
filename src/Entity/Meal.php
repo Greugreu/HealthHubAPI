@@ -46,7 +46,7 @@ class Meal
     private $users_idUsers;
 
     /**
-     * @ORM\ManyToMany(targetEntity=foodType::class, inversedBy="meal_idMeal")
+     * @ORM\ManyToMany(targetEntity=FoodType::class, inversedBy="meal_idMeal")
      */
     private $foodType_idFoodType;
 
