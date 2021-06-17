@@ -45,7 +45,7 @@ class UsersService
         $manager->persist($stats);
 
         if (array_count_values($e) > 0) {
-            return $e;
+            return new JsonResponse([$e], Response::HTTP_INTERNAL_SERVER_ERROR);
         } else {
             $manager->flush();
             return new JsonResponse(['status' => 'User Created'], Response::HTTP_CREATED);
@@ -77,10 +77,10 @@ class UsersService
         $manager->persist($stats);
 
         if (array_count_values($e) > 0) {
-            return $e;
+            return new JsonResponse([$e], Response::HTTP_INTERNAL_SERVER_ERROR);
         } else {
             $manager->flush();
-            return new JsonResponse(['status' => 'User Updated'], Response::HTTP_CREATED);
+            return new JsonResponse(['status' => 'User Updated'], Response::HTTP_OK);
         }
 
     }
