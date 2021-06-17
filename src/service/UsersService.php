@@ -19,6 +19,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UsersService
 {
     private UserPasswordEncoderInterface $passwordHasher;
+    private UsersRepository $userRepository;
+    private StatsBioRepository $statsBioRepository;
 
     public function __construct(UserPasswordEncoderInterface $passwordHasher, UsersRepository $usersRepository, StatsBioRepository $statsBioRepository)
     {
@@ -27,33 +29,31 @@ class UsersService
         $this->statsBioRepository = $statsBioRepository;
     }
 
-    public function createUser(Request $request, EntityManagerInterface $manager)
+    public function createUser(Request $request, EntityManagerInterface $manager): JsonResponse
     {
         $e = array();
-        $data = json_decode($request->getContent(), true);
-        $email = $data['email'] ?? $e = array_push($e, 'Firstname null');
-        $password = $data['password'] ?? $e = array_push($e, 'Firstname null');
-
         $user = new Users();
         $stats = new StatsBio();
-        $user
-            ->setMail($email)
-            ->setPassword($this->passwordHasher->encodePassword($user, $password));
-        $user->setStatsBioIdStatsBio($stats);
-        $stats->setCreatedAt(new \DateTime('now'));
-        $manager->persist($user);
-        $manager->persist($stats);
 
-        if (array_count_values($e) > 0) {
+        $data = json_decode($request->getContent(), true);
+        ($data['email'] != null) ? $user->setMail($data['email']) : $e = array_push($e, 'mail null');
+
+        ($data['password'] != null) ? $user->setPassword($this->passwordHasher->encodePassword($user, $data['password'])) : $e = array_push($e, 'password null');
+
+        if (count($e) > 0) {
             return new JsonResponse([$e], Response::HTTP_INTERNAL_SERVER_ERROR);
         } else {
+            $user->setStatsBioIdStatsBio($stats);
+            $stats->setCreatedAt(new \DateTime('now'));
+            $manager->persist($user);
+            $manager->persist($stats);
             $manager->flush();
             return new JsonResponse(['status' => 'User Created'], Response::HTTP_CREATED);
         }
 
     }
 
-    public function updateUserStats(int $userId, Request $request, EntityManagerInterface $manager)
+    public function updateUserStats(int $userId, Request $request, EntityManagerInterface $manager): JsonResponse
     {
         $e = array();
         $data = json_decode($request->getContent(), true);
