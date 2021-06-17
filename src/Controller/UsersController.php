@@ -50,10 +50,10 @@ class UsersController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function updateUserSignup($request, $userId): Response
+    public function updateUserSignup(Request $request, $userId): Response
     {
         try {
-            $response = $this->userService->updateUserSignup($userId, $request, $this->manager);
+            $response = $this->userService->updateUserStats($userId, $request, $this->manager);
         } catch (Exception $e)
         {
             throw $e;

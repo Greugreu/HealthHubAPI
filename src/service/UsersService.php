@@ -53,7 +53,7 @@ class UsersService
 
     }
 
-    public function updateUserSignup(int $userId, Request $request, EntityManagerInterface $manager)
+    public function updateUserStats(int $userId, Request $request, EntityManagerInterface $manager)
     {
         $e = array();
         $data = json_decode($request->getContent(), true);
