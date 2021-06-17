@@ -19,32 +19,13 @@ class StatsBioRepository extends ServiceEntityRepository
         parent::__construct($registry, StatsBio::class);
     }
 
-    // /**
-    //  * @return StatsBio[] Returns an array of StatsBio objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findByUserId($userId)
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('s.users_idUsers = :val')
+            ->setParameter('val', $userId)
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?StatsBio
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

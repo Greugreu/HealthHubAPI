@@ -35,12 +35,31 @@ class UsersController extends AbstractController
     public function createUser(Request $request): Response
     {
         try {
-            $this->userService->createUser($request, $this->manager);
+            $response = $this->userService->createUser($request, $this->manager);
         } catch (Exception $e) {
             throw $e;
         }
 
-        return new JsonResponse(['status' => 'User Created'], Response::HTTP_CREATED);
+        return $response;
+    }
+
+    /**
+     * @Route("/users/update", name="updateUser", methods={"PUT"})
+     * @param Request $request
+     * @param $userId
+     * @return Response
+     * @throws Exception
+     */
+    public function updateUserSignup($request, $userId): Response
+    {
+        try {
+            $response = $this->userService->updateUserSignup($userId, $request, $this->manager);
+        } catch (Exception $e)
+        {
+            throw $e;
+        }
+
+        return $response;
     }
 
     /**
