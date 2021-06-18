@@ -49,4 +49,8 @@ class StatsBioService
         }
 
     }
+
+    public function createGoal (Request $request, EntityManagerInterface $manager){
+
+    }
 }
