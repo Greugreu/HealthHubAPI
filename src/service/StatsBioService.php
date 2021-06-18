@@ -32,7 +32,7 @@ class StatsBioService
             $stats
                 ->setHeight($height)
                 ->setWeight($weight)
-                ->setImc($imc)
+                ->setImc(round($imc, 1))
                 ->setCreatedAt(new \DateTime());
             $manager->persist($stats);
         } else {
