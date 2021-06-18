@@ -53,6 +53,16 @@ class UsersController extends AbstractController
     }
 
     /**
+     * @Route("/users/login", name="loginUser", methods={"GET"})
+     * @param Request $request
+     * @return Response
+     */
+    public function login(Request $request): Response
+    {
+
+    }
+
+    /**
      * @Route("/users", name="users")
      */
     public function index(): Response
