@@ -19,11 +19,10 @@ class StatsBioService
         $this->statsBioRepository = $statsBioRepository;
     }
 
-    public function createImc(Request $request, EntityManagerInterface $manager)
+    public function createImc(Request $request, EntityManagerInterface $manager): JsonResponse
     {
         $e = [];
         $data = json_decode($request->getContent(), true);
-        dump($request->getContent());
         if (!empty($data['weight']) && !empty($data['height'])) {
             $height = $data['height'];
             $weight = $data['weight'];

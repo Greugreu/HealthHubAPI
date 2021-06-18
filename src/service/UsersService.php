@@ -95,7 +95,7 @@ class UsersService
                 $manager->persist($stats);
             }
 
-            if (array_count_values($e) > 0) {
+            if (count($e) > 0) {
                 return new JsonResponse([$e], Response::HTTP_INTERNAL_SERVER_ERROR);
             } else {
                 $manager->flush();
