@@ -18,12 +18,12 @@ class StatsBio
     private $id;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $weight;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $height;
 
@@ -41,6 +41,21 @@ class StatsBio
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $age;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $gender;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imc;
 
     public function getId(): ?int
     {
@@ -108,6 +123,42 @@ class StatsBio
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getAge(): ?string
+    {
+        return $this->age;
+    }
+
+    public function setAge(string $age): self
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    public function getGender(): ?int
+    {
+        return $this->gender;
+    }
+
+    public function setGender(int $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getImc(): ?string
+    {
+        return $this->imc;
+    }
+
+    public function setImc(string $imc): self
+    {
+        $this->imc = $imc;
 
         return $this;
     }
