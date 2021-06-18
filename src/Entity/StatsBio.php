@@ -57,6 +57,21 @@ class StatsBio
      */
     private $imc;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $MB;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $DEJ;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $NAP;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -159,6 +174,42 @@ class StatsBio
     public function setImc(string $imc): self
     {
         $this->imc = $imc;
+
+        return $this;
+    }
+
+    public function getMB(): ?string
+    {
+        return $this->MB;
+    }
+
+    public function setMB(?string $MB): self
+    {
+        $this->MB = $MB;
+
+        return $this;
+    }
+
+    public function getDEJ(): ?string
+    {
+        return $this->DEJ;
+    }
+
+    public function setDEJ(?string $DEJ): self
+    {
+        $this->DEJ = $DEJ;
+
+        return $this;
+    }
+
+    public function getNAP(): ?string
+    {
+        return $this->NAP;
+    }
+
+    public function setNAP(?string $NAP): self
+    {
+        $this->NAP = $NAP;
 
         return $this;
     }
