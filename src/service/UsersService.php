@@ -19,6 +19,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UsersService
 {
     private UserPasswordEncoderInterface $passwordHasher;
+    private UsersRepository $userRepository;
+    private StatsBioRepository $statsBioRepository;
 
     public function __construct(UserPasswordEncoderInterface $passwordHasher, UsersRepository $usersRepository, StatsBioRepository $statsBioRepository)
     {
@@ -27,60 +29,78 @@ class UsersService
         $this->statsBioRepository = $statsBioRepository;
     }
 
-    public function createUser(Request $request, EntityManagerInterface $manager)
+    /**
+     * @throws \JsonException
+     */
+    public function createUser(Request $request, EntityManagerInterface $manager): JsonResponse
     {
         $e = array();
-        $data = json_decode($request->getContent(), true);
-        $email = $data['email'] ?? $e = array_push($e, 'Firstname null');
-        $password = $data['password'] ?? $e = array_push($e, 'Firstname null');
-
         $user = new Users();
         $stats = new StatsBio();
-        $user
-            ->setMail($email)
-            ->setPassword($this->passwordHasher->encodePassword($user, $password));
-        $user->setStatsBioIdStatsBio($stats);
-        $stats->setCreatedAt(new \DateTime('now'));
-        $manager->persist($user);
-        $manager->persist($stats);
 
-        if (array_count_values($e) > 0) {
-            return new JsonResponse([$e], Response::HTTP_INTERNAL_SERVER_ERROR);
+        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return new JsonResponse(['status' => 'Error on payload', Response::HTTP_BAD_REQUEST]);
         } else {
-            $manager->flush();
-            return new JsonResponse(['status' => 'User Created'], Response::HTTP_CREATED);
-        }
+            ($data['email'] != null) ? $user->setMail($data['email']) : array_push($e, 'mail null');
 
+            ($data['password'] != null) ? $user->setPassword($this->passwordHasher->encodePassword($user, $data['password'])) : array_push($e, 'password null');
+
+            if (count($e) > 0) {
+                return new JsonResponse([$e], Response::HTTP_INTERNAL_SERVER_ERROR);
+            } else {
+                $user->setStatsBioIdStatsBio($stats);
+                $stats->setCreatedAt(new \DateTime('now'));
+                $manager->persist($user);
+                $manager->persist($stats);
+                $manager->flush();
+                return new JsonResponse(['status' => 'User Created'], Response::HTTP_CREATED);
+            }
+        }
     }
 
-    public function updateUserStats(int $userId, Request $request, EntityManagerInterface $manager)
+    /**
+     * @throws \JsonException
+     */
+    public function updateUserStats(int $userId, Request $request, EntityManagerInterface $manager): JsonResponse
     {
         $e = array();
-        $data = json_decode($request->getContent(), true);
-        $firstname = $data['firstname'] ?? $e = array_push($e, 'Firstname null');
-        $lastname = $data['lastname'] ?? $e = array_push($e, 'lastname null');
-        $weight = $data['weight'] ?? $e = array_push($e, 'weight null');
-        $height = $data['height'] ?? $e = array_push($e, 'height null');
-        $gender = $data['gender'] ?? $e = array_push($e, 'gender null');
-
-        $user = $this->userRepository->find($userId);
-        $stats = $this->statsBioRepository->findOneBy(['users_idUsers' => $userId]);
-        $user
-            ->setFirstname($firstname)
-            ->setLastname($lastname)
-            ->setGender($gender)
-            ->setUpdatedAt(new \DateTime('now'));
-        $stats->setWeight($weight);
-        $stats->setHeight($height);
-        $stats->setUpdatedAt(new \DateTime('now'));
-        $manager->persist($user);
-        $manager->persist($stats);
-
-        if (array_count_values($e) > 0) {
-            return new JsonResponse([$e], Response::HTTP_INTERNAL_SERVER_ERROR);
+        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return new JsonResponse(['status' => 'Error on payload', Response::HTTP_BAD_REQUEST]);
         } else {
-            $manager->flush();
-            return new JsonResponse(['status' => 'User Updated'], Response::HTTP_OK);
+            $firstname = $data['firstname'] ?? array_push($e, 'Firstname null');
+            $lastname = $data['lastname'] ?? array_push($e, 'lastname null');
+            $weight = $data['weight'] ?? array_push($e, 'weight null');
+            $height = $data['height'] ?? array_push($e, 'height null');
+            $gender = $data['gender'] ?? array_push($e, 'gender null');
+
+            $user = $this->userRepository->find($userId);
+            $stats = $this->statsBioRepository->findOneBy(['users_idUsers' => $userId]);
+
+            if ($user == null) {
+                return new JsonResponse(['status' => 'User not found', Response::HTTP_INTERNAL_SERVER_ERROR]);
+            } elseif ($stats == null) {
+                return new JsonResponse(['status' => 'User stats not found'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            } else {
+                $user
+                    ->setFirstname($firstname)
+                    ->setLastname($lastname)
+                    ->setGender($gender)
+                    ->setUpdatedAt(new \DateTime('now'));
+                $stats->setWeight($weight);
+                $stats->setHeight($height);
+                $stats->setUpdatedAt(new \DateTime('now'));
+                $manager->persist($user);
+                $manager->persist($stats);
+            }
+
+            if (array_count_values($e) > 0) {
+                return new JsonResponse([$e], Response::HTTP_INTERNAL_SERVER_ERROR);
+            } else {
+                $manager->flush();
+                return new JsonResponse(['status' => 'User Updated'], Response::HTTP_OK);
+            }
         }
 
     }

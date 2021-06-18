@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\StatsBio;
 use App\Entity\Users;
+use App\Repository\StatsBioRepository;
+use App\Repository\UsersRepository;
 use App\service\UsersService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -13,6 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\User;
 
 class UsersController extends AbstractController
 {
@@ -20,27 +25,20 @@ class UsersController extends AbstractController
     private EntityManagerInterface $manager;
     private UsersService $userService;
 
-    public function __construct(EntityManagerInterface $manager, UsersService $usersService)
+    public function __construct(EntityManagerInterface $manager,
+                                UsersService $usersService)
     {
         $this->manager = $manager;
-        $this->userService = $usersService;
-    }
+        $this->userService = $usersService;}
 
     /**
      * @Route("/users/new", name="createUser", methods={"POST"})
      * @param Request $request
      * @return Response
-     * @throws Exception
      */
     public function createUser(Request $request): Response
     {
-        try {
-            $response = $this->userService->createUser($request, $this->manager);
-        } catch (Exception $e) {
-            throw $e;
-        }
-
-        return $response;
+        return $this->createUser($request);
     }
 
     /**
@@ -48,18 +46,20 @@ class UsersController extends AbstractController
      * @param Request $request
      * @param $userId
      * @return Response
-     * @throws Exception
      */
     public function updateUserSignup(Request $request, $userId): Response
     {
-        try {
-            $response = $this->userService->updateUserStats($userId, $request, $this->manager);
-        } catch (Exception $e)
-        {
-            throw $e;
-        }
+        return $this->userService->updateUserStats($userId, $request, $this->manager);
+    }
 
-        return $response;
+    /**
+     * @Route("/users/login", name="loginUser", methods={"GET"})
+     * @param Request $request
+     * @return Response
+     */
+    public function login(Request $request): Response
+    {
+
     }
 
     /**
