@@ -43,7 +43,6 @@ class AuthController extends AbstractController
             "exp"  => (new \DateTime())->modify("+5 minutes")->getTimestamp(),
         ];
 
-
         $jwt = JWT::encode($payload, $this->getParameter('jwt_secret'), 'HS256');
         return $this->json([
             'message' => 'success!',

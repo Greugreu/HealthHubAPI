@@ -46,6 +46,7 @@ class UsersController extends AbstractController
      * @param Request $request
      * @param $userId
      * @return Response
+     * @throws \JsonException
      */
     public function updateUserSignup(Request $request, $userId): Response
     {
