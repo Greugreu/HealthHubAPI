@@ -72,6 +72,11 @@ class StatsBio
      */
     private $NAP;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $Goal;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -210,6 +215,18 @@ class StatsBio
     public function setNAP(?string $NAP): self
     {
         $this->NAP = $NAP;
+
+        return $this;
+    }
+
+    public function getGoal(): ?string
+    {
+        return $this->Goal;
+    }
+
+    public function setGoal(?string $Goal): self
+    {
+        $this->Goal = $Goal;
 
         return $this;
     }
