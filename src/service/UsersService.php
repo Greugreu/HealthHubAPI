@@ -7,6 +7,7 @@ use App\Entity\StatsBio;
 use App\Entity\Users;
 use App\Repository\StatsBioRepository;
 use App\Repository\UsersRepository;
+use Doctrine\DBAL\Driver\SQLSrv\Exception\Error;
 use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -61,6 +62,7 @@ class UsersService
 
     /**
      * @throws \JsonException
+     * @throws Error
      */
     public function updateUserStats(int $userId, Request $request, EntityManagerInterface $manager): JsonResponse
     {
@@ -83,16 +85,20 @@ class UsersService
             } elseif ($stats == null) {
                 return new JsonResponse(['status' => 'User stats not found'], Response::HTTP_INTERNAL_SERVER_ERROR);
             } else {
-                $user
-                    ->setFirstname($firstname)
-                    ->setLastname($lastname)
-                    ->setGender($gender)
-                    ->setUpdatedAt(new \DateTime('now'));
-                $stats->setWeight($weight);
-                $stats->setHeight($height);
-                $stats->setUpdatedAt(new \DateTime('now'));
-                $manager->persist($user);
-                $manager->persist($stats);
+                try {
+                    $user
+                        ->setFirstname($firstname)
+                        ->setLastname($lastname)
+                        ->setGender($gender)
+                        ->setUpdatedAt(new \DateTime('now'));
+                    $stats->setWeight($weight);
+                    $stats->setHeight($height);
+                    $stats->setUpdatedAt(new \DateTime('now'));
+                    $manager->persist($user);
+                    $manager->persist($stats);
+                } catch (\Exception $exception) {
+                    throw new Error($exception->getMessage());
+                }
             }
 
             if (count($e) > 0) {
